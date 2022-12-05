@@ -4,7 +4,7 @@ fetch('http://localhost:3000/api/products')
     showItems(data);
   })
   .catch(function(err) {
-    // Une erreur est survenue
+    // Une erreur est survenue, Avez vous pensé à lancer le serveur local (Port 3000) ?
   });
 
   //---------J'AFFICHE TOUS LES PRODUITS---------
