@@ -1,26 +1,32 @@
 fetch('http://localhost:3000/api/products')
   .then(res => res.json())
-  .then(data => { 
+  .then(function(data) { 
     showItems(data);
   })
   .catch(function(err) {
     // Une erreur est survenue, Avez vous pensé à lancer le serveur local (Port 3000) ?
   });
-
-  //---------J'AFFICHE TOUS LES PRODUITS---------
-
-
+  
   function showItems(data) {
     for (product of data) {
-        const productCard = document.getElementById('items');
-        productCard.innerHTML +=`
-        <a href="./product.html?id=${product._id}">
-        <article>
-          <img src="${product.imageUrl}" alt="${product.altTxt}">
-          <h3 class="productName">${product.name}</h3>
-          <p class="productDescription">${product.description}</p>
-        </article>
-        </a>
-      `; 
+        let productCard = document.createElement('a');
+        productCard.href="./product.html?id="+`${product._id}`;
+        let article = document.createElement('article');
+        let image = document.createElement('img');
+        image.src=`${product.imageUrl}`;
+        let h3 = document.createElement('h3');
+        h3.classList.add("productName");
+        h3.innerHTML =`${product.name}`;
+        let p = document.createElement('p');
+        p.classList.add("productDescription");
+        p.innerHTML = `${product.description}`;
+
+    const items = document.getElementById('items');
+      items.append(productCard);
+        productCard.append(article);
+        article.append(image);
+        article.append(h3);
+        article.append(p);
+
     }
 }
