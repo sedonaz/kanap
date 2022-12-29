@@ -1,4 +1,4 @@
-
+//On récupère le numéros de commande depuis l'URL
 let id = new URL(window.location.href).searchParams.get("id");
 //On sélectionne l'élément HTML où s'affichera le numéro de commande 
 let orderId = document.querySelector('#orderId');
