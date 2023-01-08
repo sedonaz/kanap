@@ -4,7 +4,6 @@ let id = new URL(window.location.href).searchParams.get("id");
 let orderId = document.querySelector('#orderId');
 //On insère le numéro de commande dans le code html
 orderId.innerHTML = id;
-alert('Votre commande a été validée ! Merci pour votre achat')
 //On néttoie le localStorage
 localStorage.clear();
 

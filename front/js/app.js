@@ -19,51 +19,60 @@ function deleteProduct(product) {
     window.location.reload();
     saveCart(cart);    
 }
+let cart = getCart();
 //Fonction pour modifier la quantité de chaque produit
 function modifyQuantity(product, quantity) {
-    let itemQuantity = document.querySelectorAll('.itemQuantity');
-    for (let j = 0; j < itemQuantity.length; j++) {
-        let itemNewQuantity = itemQuantity[j].value;
-        const newLocalStorage = {
-            id: cart[j].id,
-            image: cart[j].image,
-            alt: cart[j].alt,
-            name: cart[j].name,
-            color: cart[j].color,
-            price: cart[j].price,   
-            quantity: itemNewQuantity,
-        };
-        cart[j] = newLocalStorage;
-        window.location.reload();
-        saveCart(cart);    
+    let productFound = cart.find((p) => p.id === product.id && p.color === product.color);
+    if (productFound != undefined){
+        if(quantity <= 0){
+            deleteProduct(product);
+        }
+        else if(quantity>100){
+            alert("la quantité est limitée à 100 articles");
+        }
+        else{
+            productFound.quantity = quantity;
+            saveCart(cart);
+        }
+    }
+    else{
+        cart.push(product);
     }
 }
-let productTable = JSON.parse(localStorage.getItem("productTable"));
 //Fonction pour afficher le nombre d'article
 function totalArticles() {
     let totalItems = 0;
-    for (let l in productTable) {
-        let newQuantity = parseInt(productTable[l].quantity, 10);
-        totalItems += newQuantity;
+    for (let l of cart) {
+        totalItems += parseInt(l.quantity);
     }
-    let totalQuantity = document.getElementById('totalQuantity');
-    totalQuantity.textContent = totalItems;
+    return totalItems;
 }
-totalArticles();
-//Fonction pour afficher le prix total
-function totalPrice(){
-    let calculPrice = [];
-    for (let m = 0; m < productTable.length; m++) {
-        let cartTotal = productTable[m].price * productTable[m].quantity;
-        calculPrice.push(cartTotal
-            );
-            let reduce = (previousValue, currentValue) => previousValue + currentValue;
-            total = calculPrice.reduce(reduce);
-        }
-        const totalPrice = document.getElementById('totalPrice');
-        totalPrice.textContent = total;
+//Fonction pour modifier le prix total
+function modifyTotalPrice(product,oldQuantity,newQuantity){
+    if (newQuantity > oldQuantity){
+        totalCartPrice += product.price *(newQuantity-oldQuantity);
     }
-    totalPrice();
-    
-    
-    
+    else if(newQuantity < oldQuantity){
+        totalCartPrice += product.price *(newQuantity-oldQuantity);
+    }
+    return totalCartPrice; 
+}
+
+//Fonction pour afficher le prix total
+function getTotalPrice(product, quantity){
+    totalCartPrice += product.price * quantity;
+    return totalCartPrice;
+}
+//Fonction pour ajouter au panier
+function addToCart(product){
+    let productFound = cart.find((p) => p.id === product.id && p.color === product.color);
+    if (productFound != undefined){
+        productFound.quantity = Number(productFound.quantity) + Number(product.quantity);
+    }
+    else{
+        cart.push(product);
+    }
+    saveCart(cart);
+} 
+
+

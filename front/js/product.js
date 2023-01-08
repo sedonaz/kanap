@@ -50,7 +50,6 @@ getColors();
 let productQuantity = document.getElementById("quantity");
 let colorChoice = document.getElementById("colors");
 let btn_addToCart = document.querySelector("#addToCart");
-let productTable = JSON.parse(localStorage.getItem("cart"));
 //Ajout du listener sur le bouton ajouter au panier
 btn_addToCart.addEventListener("click", async function(e) {
   await getProductById();
@@ -64,31 +63,12 @@ btn_addToCart.addEventListener("click", async function(e) {
     imageUrl : component.imageUrl,
     title : component.name,
   }
-  if (colorChoice.value == 0 || productQuantity.value == 0){
-    alert("la couleur ou la quantité n'est pas définie");
+  if(colorChoice.value != "" && productQuantity.value > 0 && productQuantity.value <= 100){
+    addToCart(productOption);
   }
-  //LOCALSTORAGE
-  //Si un produit est déja dans le panier avec la quantité et la couleur
-  if (productTable){
-    let productFound = productTable.find((p) => p.id === productOption.id && p.color === productOption.color);
-    if(productFound){
-      productFound.quantity = parseInt(productFound.quantity) + parseInt(productQuantity.value); 
-    }
-    else{
-      productTable.push(productOption);
-    }
-    //Enregistrement du panier dans le localStorage
-    localStorage.setItem("productTable", JSON.stringify(productTable));
-  }
-  //Si le panier est vide 
   else{
-    productTable = [];
-    productTable.push(productOption);
-    localStorage.setItem("productTable", JSON.stringify(productTable));
-    alert("le produit à été ajouté au panier");
+    alert('Veuillez selectionner la couleur et la quantité . Attention la quantité maximale est fixée à 100 articles');
   }
-  
-  
 })
 
 
